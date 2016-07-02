@@ -50,6 +50,7 @@ body {
 	border: none;
 	color: #1a1a1a;
 	font-size: 16px;
+  outline: none;
 }
 
 #title-bar-btns button:hover {

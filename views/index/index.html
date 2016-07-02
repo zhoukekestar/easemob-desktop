@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <style>
+      form input {
+        display: block;
+        width: 12em;
+        padding: 4px;
+        margin: 20px auto;
+      }
+    </style>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <div id="title-bar">
+     <div id="title"></div>
+     <div id="title-bar-btns">
+       <button id="min-btn">-</button>
+       <button id="max-btn">+</button>
+       <button id="close-btn">x</button>
+     </div>
+   </div>
+    <form id='loginForm' action='https://dev-common.toomao.com/empty' data-role='formJSON' method='GET'>
+      <input name='username' value='123456' placeholder="用户名" />
+      <input type='password' name='password' value='123456' placeholder="密码" />
+      <input type='submit' value='登录' />
+    </form>
+
+    <script src='https://common.toomao.com/js?p=formJSON,formValidator,formOnInvalid,imageView,paging,tabs,template,toast,ajaxUpload,ajaxUpload-single,webcom,lazyload'></script>
+
+  </body>
+  <script src="./index.js"></script>
+  <script>
+    loginForm.onended = function(d) {
+      d = JSON.parse('{"user":"564dc4260cf20c5cfcaff64b","password":"BdIQaC","shopId":"565281670cf2bec1808e1c23","nickname":"kk 那23453444444444444444444444444444444444444444444","headimage":"http://pic.toomao.com/0e3ef53dd2a591804de61d60ab099aa4b81177e2"}');
+
+      localStorage.setItem('user-info', JSON.stringify(d));
+
+      require('electron').remote.getCurrentWindow().loadMainPanel();
+    }
+    loginForm.onerror = function(d) {
+      alert("用户名或密码错误")
+    }
+  </script>
+  <script>
+    // You can also require other files to run in this process
+    require('../../renderer.js')
+  </script>
+</html>

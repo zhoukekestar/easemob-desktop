@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <style>
+      form input {
+        display: block;
+        width: 12em;
+        padding: 4px;
+        margin: 20px auto;
+      }
+      .person-list li {
+        min-height: 50px;
+        position: relative;
+        margin: 0;
+        padding: 8px;
+        padding-left: 60px;
+        list-style: none;
+        line-height: 50px;
+      }
+      .person-list li:hover {
+        background: rgba(92, 179, 230, 0.45);
+      }
+      .person-list li img {
+        height: 50px;
+        width: 50px;
+        position: absolute;
+        left: 8px;
+        top: 8px;
+        border-radius: 4px;
+      }
+    </style>
+    <link rel="stylesheet" href="../login/index.css" />
+  </head>
+  <body>
+    <div id="title-bar">
+     <div id="title"></div>
+     <div id="title-bar-btns">
+       <button id="min-btn">-</button>
+       <button id="max-btn">+</button>
+       <button id="close-btn">x</button>
+     </div>
+   </div>
+    <div id='toomaoChat' data-role="toomaoChat" data-config=""></div>
+    <div class="person-list"></div>
+    <div class="dialog-lis-wrapper"></div>
+
+    <script type="text/html" id="tmpl_person_list" data-role="template" data-holder=".person-list">
+      <%  var notify = false;
+          list.forEach(function(person) {
+            if (!person.read) {notify = true; }
+      %>
+            <li data-id='<%=person.id%>' class='<%=person.read ? "" : "notify" %>'><img src='<%=person.headimage%>' /><%=person.nickname%></li>
+      <%  });
+
+
+      %>
+      /*
+      if (notify) {
+        document.querySelector(".person-list-wrapper .iconfont").classList.add("notify");
+      } else {
+        document.querySelector(".person-list-wrapper .iconfont").classList.remove("notify");
+      }
+      */
+    </script>
+    <script type="text/html" id="tmpl_dialog_list" data-role="template" data-holder=".dialog-list-wrapper">
+      <div class='header'>与<b><%=session.nickname%></b>聊天<a href='javascript:;' onclick='this.parentNode.parentNode.classList.remove("show")'>&times;</a></div>
+      <ul class='dialog-list toomao-scroll'>
+        <% var  lastTime = null,
+                msgCount = 0;
+
+            session.dialog.forEach(function(msg) {
+              msgCount++;
+              if (msg.time - lastTime > 60000 || msgCount > 5) {
+                lastTime = msg.time, msgCount = 0;
+        %>
+                <li class='time'><span><%=new Date(msg.time).format("MM/dd hh:mm")%></span></li>
+        <%    }  %>
+              <li class='<%= msg.mine ? "right": ""%>'>
+                <div>
+                  <div class='person'><img src='<%=msg.mine ? owner.headimage : session.headimage %>'/></div>
+                </div>
+                <div class='content' data-tonickname='<%=msg.mine ? owner.nickname : session.nickname %>'><%=msg.data%></div>
+              </li>
+        <% }) %>
+      </ul>
+      <div class='footer'>
+        <textarea rows="3" class='toomao-scroll'></textarea>
+        <div class='btn-group'>
+          <button class='sendMsg' data-to='<%=session.id%>' data-tonickname='<%=session.nickname%>' data-toheadimage='<%=session.headimage%>'>发送</button>
+        </div>
+      </div>
+    </script>
+    <script src="../login/index.js"></script>
+    <script>
+      var userInfo = localStorage.getItem('user-info');
+      userInfo = JSON.parse(userInfo);
+      userInfo.tmplSession = '#tmpl_person_list';
+      userInfo.tmplDialog = '#tmpl_dialog_list';
+
+      toomaoChat.dataset.config = JSON.stringify(userInfo)
+    </script>
+    <script src='https://common.toomao.com/js?p=formJSON,formValidator,formOnInvalid,imageView,paging,tabs,template,toast,ajaxUpload,ajaxUpload-single,webcom,lazyload'></script>
+    <script src='./easemob/sdk/jquery-1.11.1.js'></script>
+    <script src='./easemob/sdk/strophe.js'></script>
+    <script src='./easemob/sdk/easemob.im-1.0.7.js'></script>
+    <script src='./toomaoChat.js'></script>
+    <script>require('../../renderer.js')</script>
+
+    </body>
+</html>

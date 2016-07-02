@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <div>
+    <input name='name'>
+    <input name='password'>
+    <button id='login'>登陆</button>
+  </div>
+
+  <script src="//webim.easemob.com/sdk/jquery-1.11.1.js"></script>
+  <script src="//webim.easemob.com/sdk/strophe.js"></script>
+  <script src="//webim.easemob.com/sdk/easemob.im-1.0.7.js"></script>
+
+  <input id='toid' placeholder='接收方'>
+  <textarea id='msg'></textarea>
+  <button id='sendMsg'>发送消息</button>
+</head>
+<body>
+
+
+  <script>
+    $(function() {
+
+
+      $('#login').click(function(){
+        var user = $('input[name="name"]').val(),
+            pwd  = $('input[name="password"]').val();
+
+        window.conn = new Easemob.im.Connection();
+        conn.init({
+          onOpened : function() {
+            alert("成功登录");
+            // conn.setPresence();
+
+            conn.getRoster({
+             success : function(roster) {
+                console.log(roster);
+              }
+            });
+          },
+          onTextMessage: function(msg) {
+            alert('接收到来自' + msg.from + '的消息' + msg.data)
+            console.log(msg)
+          },
+          onEmotionMessage : function(msg) {
+            alert(msg)
+            console.log(msg)
+          },
+          onPictureMessage : function(msg) {
+            alert(msg)
+            console.log(msg)
+          },
+          onAudioMessage : function(msg) {
+            alert(msg)
+            console.log(msg)
+          }
+        });
+        conn.open({
+          user : user,
+          pwd : pwd,
+          appKey : 'lanmal#toomao'
+        });
+      })
+
+
+
+
+      $('#sendMsg').on('click', function(){
+        conn.sendTextMessage({
+            to : $('#toid').val(),
+            msg : $('#msg').val()
+        });
+      })
+    });
+  </script>
+</body>
+</html>

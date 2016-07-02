@@ -4,18 +4,31 @@
     <meta charset="UTF-8">
     <title>Hello World!</title>
     <style>
+      form {
+        margin-top: 40px;
+      }
       form input {
         display: block;
         width: 12em;
-        padding: 4px;
         margin: 20px auto;
+        letter-spacing: 2px;
+        border-radius: 3px;
+        border: solid 1px #5cb3e6;
+        text-align: center;
+        padding: 9px;
+        outline: none;
+      }
+      form input[type=submit] {
+        width: 180px;
+        background: #5cb3e6;
+        color: #fff;
       }
     </style>
     <link rel="stylesheet" href="./index.css" />
   </head>
   <body>
     <div id="title-bar">
-     <div id="title">土冒聊天</div>
+     <div id="title"></div>
      <div id="title-bar-btns">
        <button id="min-btn">-</button>
        <button id="max-btn">+</button>
@@ -34,15 +47,18 @@
   <script src="./index.js"></script>
   <script>
     loginForm.onended = function(d) {
-      d.hxid = '564dc4260cf20c5cfcaff64b';
-      d.hxpwd = 'BdIQaC';
+      d = JSON.parse('{"user":"564dc4260cf20c5cfcaff64b","password":"BdIQaC","shopId":"565281670cf2bec1808e1c23","nickname":"kk 那23453444444444444444444444444444444444444444444","headimage":"http://pic.toomao.com/0e3ef53dd2a591804de61d60ab099aa4b81177e2"}');
 
-      localStorage.setItem('hxid', d.hxid);
-      localStorage.setItem('hxpwd', d.hxpwd);
+      localStorage.setItem('user-info', JSON.stringify(d));
+
+      require('electron').remote.getCurrentWindow().loadMainPanel();
+    }
+    loginForm.onerror = function(d) {
+      alert("用户名或密码错误")
     }
   </script>
   <script>
     // You can also require other files to run in this process
-    require('../renderer.js')
+    require('../../renderer.js')
   </script>
 </html>
